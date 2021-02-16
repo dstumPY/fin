@@ -1,9 +1,17 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 repos:
 -   repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v2.4.0
     hooks:
     -   id: check-yam
+=======
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+    # -   id: check-yam
+>>>>>>> ac655aa (Added docstring)
     -   id: end-of-file-fixer
     -   id: trailing-whitespace
     -   id: check-added-large-files
@@ -36,6 +44,7 @@ repos:
 -   repo: https://github.com/PyCQA/pydocstyle
     rev: 5.0.2
     hooks:
+<<<<<<< HEAD
     -   id: pydocstyle
 =======
 # repos:
@@ -77,3 +86,6 @@ repos:
 #     hooks:
 #     -   id: pydocstyle
 >>>>>>> f406f0d (Added docstring)
+=======
+    -   id: pydocstyle
+>>>>>>> ac655aa (Added docstring)
