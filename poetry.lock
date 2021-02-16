@@ -230,6 +230,23 @@ dev = ["dash_flow_example (==0.0.5)", "dash-dangerously-set-inner-html", "flake8
 testing = ["pytest-sugar (>=0.9.4)", "lxml (>=4.6.2)", "selenium (>=3.141.0)", "percy (>=2.0.2)", "requests[security] (>=2.21.0)", "waitress (>=1.4.4)", "pytest (>=4.6,<5)", "pytest-mock (>=2.0.0,<3)", "beautifulsoup4 (>=4.8.2,<=4.9.3)", "pytest (>=6.0.2)", "pytest-mock (>=3.2.0)", "beautifulsoup4 (>=4.8.2)"]
 
 [[package]]
+<<<<<<< HEAD
+=======
+name = "dash-bootstrap-components"
+version = "0.11.2"
+description = "Bootstrap themed components for use in Plotly Dash"
+category = "main"
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
+
+[package.dependencies]
+dash = ">=1.9.0"
+
+[package.extras]
+pandas = ["numpy", "pandas"]
+
+[[package]]
+>>>>>>> f406f0d (Added docstring)
 name = "dash-core-components"
 version = "1.15.0"
 description = "Core component suite for Dash"
@@ -1458,7 +1475,11 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7"
+<<<<<<< HEAD
 content-hash = "624cfdeac7599372f7aa7f7b8dbc9351c9ec80799219c9ca76333836239a1c56"
+=======
+content-hash = "406e44845583dd4ad4194fe0f391f863fe4b14579acec0eaef0104e9a2262370"
+>>>>>>> f406f0d (Added docstring)
 
 [metadata.files]
 appdirs = [
@@ -1623,6 +1644,13 @@ cycler = [
 dash = [
     {file = "dash-1.19.0.tar.gz", hash = "sha256:ba7307f94795fee844551791d401073d4e9b8d71596b37d54e131cec044268ef"},
 ]
+<<<<<<< HEAD
+=======
+dash-bootstrap-components = [
+    {file = "dash-bootstrap-components-0.11.2.tar.gz", hash = "sha256:646a0fed538dd8790d23e3e439f8ccad0d0d7a4071bdee0dce9b2276b9f13a52"},
+    {file = "dash_bootstrap_components-0.11.2-py2.py3-none-any.whl", hash = "sha256:3ca88b874aafd18338dc76ca0fa8424b1fb3a3f96a2a13093ce24e67c8ae9507"},
+]
+>>>>>>> f406f0d (Added docstring)
 dash-core-components = [
     {file = "dash_core_components-1.15.0.tar.gz", hash = "sha256:b61cb37322de91b4feb0d4d823694cbba8686f6459db774b53d553135350c71e"},
 ]
