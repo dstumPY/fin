@@ -1,7 +1,7 @@
 # Stock Market Analysis with fin
 
 This is a web-based tool to help you with analyzing and comparing different stocks.
-The data will be provided by the beautiful [yfinance] (https://pypi.org/project/yfinance/) project.
+The data will be provided by the beautiful [yfinance](https://pypi.org/project/yfinance/) project.
 
 ## Getting started
 
@@ -17,7 +17,7 @@ The data will be provided by the beautiful [yfinance] (https://pypi.org/project/
     docker-compose up -d --force-recreate prod
     ```
 
-3. Open your browser at [http://localhost:8050] (http://localhost:8050).
+3. Open your browser at [http://localhost:8050](http://localhost:8050) .
 
 
 
