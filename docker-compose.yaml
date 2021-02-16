@@ -17,30 +17,17 @@ services:
     command: bash -c "poetry run python"
     tty: true
 
-  dev-jupyter:
-    build:
-      context: .
-      target: dev
-    image: fin_dev_jupyter_image
-    container_name: fin_dev_jupyter
-    ports:
-      - 8888:8888
-    volumes:
-      - .:/home/root/app/.
-      - vscode-extensions:/root/.vscode-server/extensions
-    command: bash -c "poetry run jupyter notebook --ip=0.0.0.0 --allow-root --no-browser --NotebookApp.disable_check_xsrf=True --NotebookApp.token=''"
-    tty: true
-
   prod:
     build:
       context: .
       target: prod
-    image: fin_prod_image
+    image: fin_prod_image:$VERSION
     container_name: fin_prod
     env_file:
       - .env
-    command: /bin/bash
-    tty: true
+    ports:
+      - 8050:8050
+    command: poetry run python app.py
 
 volumes:
   vscode-extensions:
