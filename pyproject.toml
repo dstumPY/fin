@@ -2,10 +2,10 @@
 line-length = 88
 
 [tool.isort]
-known_third_party = []
+known_third_party = ["cufflinks", "dash", "dash_bootstrap_components", "dash_core_components", "dash_html_components", "dotenv", "joblib", "pandas", "pkg_resources", "plotly", "pylab", "yfinance"]
 line_length = 88
-multi-line-output = 3
-include_trainling_comma = "True"
+multi_line_output = 3
+include_trailing_comma = "True"
 force_grid_wrap = 0
 use_parentheses = "True"
 

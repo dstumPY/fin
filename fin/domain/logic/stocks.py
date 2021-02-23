@@ -1,14 +1,17 @@
+"""Load and visualize stock market data."""
+from datetime import date
+from ftplib import FTP
+from typing import Dict
+
 import cufflinks as cf
 import joblib
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.offline as plyo
 import yfinance as yf
-from fin import config
-from datetime import date
-from ftplib import FTP
 from pylab import mpl, plt
-from typing import Dict
+
+from fin import config
 from fin.domain.session.usersession import session_default
 
 plt.style.use("seaborn")
@@ -16,7 +19,7 @@ mpl.rcParams["font.family"] = "serif"
 
 # activate plotly only in a notebook environment
 try:
-    get_ipython
+    get_ipython  # type: ignore
     plyo.init_notebook_mode(connected=True)
     print("Plotly activated.")
 except NameError:
@@ -47,7 +50,9 @@ def stocks_data(
     return stocks_df
 
 
-def stocks_chart(stocks_data: pd.DataFrame, settings_dict: Dict) -> go.Figure:
+def stocks_chart(
+    stock_data: pd.DataFrame = None, settings_dict: Dict = None
+) -> go.Figure:
     """Generate plotly finance chart.
 
     Args:
@@ -57,6 +62,9 @@ def stocks_chart(stocks_data: pd.DataFrame, settings_dict: Dict) -> go.Figure:
     Returns:
         go.Figure: final stock chart
     """
+    # setting default values
+    data = stock_data or stocks_data()
+    settings_dict = settings_dict or session_default.__dict__
     # extract chart settings from settings_dict
 
     # if  UI checklists were deselected settings_dict values are empty lists
@@ -66,9 +74,7 @@ def stocks_chart(stocks_data: pd.DataFrame, settings_dict: Dict) -> go.Figure:
     add_sma_feature = bool(len(settings_dict["sma_check_state"]))
 
     # initialize QuantFig chart figure
-    qf = cf.QuantFig(
-        stocks_data, title=settings_dict["ticker_dropdown_state"], legend="right"
-    )
+    qf = cf.QuantFig(data, title=settings_dict["ticker_dropdown_state"], legend="right")
 
     if add_boll_feature is True:
         qf.add_bollinger_bands(
@@ -177,4 +183,6 @@ def extract_ticker_symbols():
 
 
 if __name__ == "__main__":
-    fig_old = get_quantfig(yf.Ticker("PLUG"), date(2020, 1, 1), date.today())[1]
+    fig_data = stocks_data()
+    fig = stocks_chart()
+    print("Done.")
