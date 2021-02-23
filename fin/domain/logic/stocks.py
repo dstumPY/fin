@@ -4,12 +4,12 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.offline as plyo
 import yfinance as yf
-from src import config
+from fin import config
 from datetime import date
-from pylab import mpl, plt
-from typing import Tuple
 from ftplib import FTP
-
+from pylab import mpl, plt
+from typing import Dict
+from fin.domain.session.usersession import session_default
 
 plt.style.use("seaborn")
 mpl.rcParams["font.family"] = "serif"
@@ -23,35 +23,75 @@ except NameError:
     pass
 
 
-def get_quantfig(
-    ticker_obj: yf.Ticker, start: date, end: date
-) -> Tuple[pd.DataFrame, go.Figure]:
-    """Generate yfinance data and generate QuantFig object.
+def stocks_data(
+    ticker_symbol: str = session_default.ticker,
+    date_start: str = session_default.start_date,
+    date_end: str = session_default.end_date,
+) -> pd.DataFrame:
+    """Request stock market DataFrame using yfinance.
 
     Args:
-        ticker_obj (yf.Ticker): ticker symbol to request market data
-        start (date): start date for stock data
-        end (date): end date for stock data
+        ticker_symbol (str): ticker symbol string used to request market data
+        date_start (str): include only dates later than date_start
+        date_end (str): include only dates earlier than date_end
 
     Returns:
-        Tuple[pd.DataFrame, cf.QuantFig]:
-                    - DF containing stock data
-                    - QuantFig containing plotting information
+        pd.DataFrame: DataFrame containing stock data
     """
-    # request api data
-    data = ticker_obj.history(
-        start=start.strftime("%Y-%m-%d"), end=end.strftime("%Y-%m-%d"), interval="1d"
-    ).drop(columns=["Volume", "Dividends", "Stock Splits"])
-
-    # generate QuantFig object
-    qf = cf.QuantFig(data, title="my_title", legend="right")
-    # add financial metrics
-    qf.add_bollinger_bands(
-        periods=15, boll_std=2, colors=["magenta", "grey"], fill=True
+    stocks_df = (
+        yf.Ticker(ticker_symbol)
+        .history(start=date_start, end=date_end, interval="1d")
+        .drop(columns=["Volume", "Dividends", "Stock Splits"])
     )
-    qf.add_sma([10, 20], width=2, color=["green", "lightgreen"], legendgroup=True)
-    qf.add_macd()
-    qf.add_rsi(periods=14, showbands=False)
+
+    return stocks_df
+
+
+def stocks_chart(stocks_data: pd.DataFrame, settings_dict: Dict) -> go.Figure:
+    """Generate plotly finance chart.
+
+    Args:
+        stocks_data (pd.DataFrame): stock data derived from yf
+        settings (Dict): settings derived from the UI
+
+    Returns:
+        go.Figure: final stock chart
+    """
+    # extract chart settings from settings_dict
+
+    # if  UI checklists were deselected settings_dict values are empty lists
+    add_boll_feature = bool(len(settings_dict["bollinger_check_state"]))
+    add_macd_feature = bool(len(settings_dict["macd_check_state"]))
+    add_rsi_feature = bool(len(settings_dict["rsi_check_state"]))
+    add_sma_feature = bool(len(settings_dict["sma_check_state"]))
+
+    # initialize QuantFig chart figure
+    qf = cf.QuantFig(
+        stocks_data, title=settings_dict["ticker_dropdown_state"], legend="right"
+    )
+
+    if add_boll_feature is True:
+        qf.add_bollinger_bands(
+            periods=settings_dict["bollinger_periods_state"],
+            boll_std=settings_dict["boll_std_state"],
+        )
+
+    if add_macd_feature is True:
+        qf.add_macd(
+            fast_period=settings_dict["macd_fast_period_state"],
+            slow_period=settings_dict["macd_slow_period_state"],
+            signal_period=settings_dict["macd_signal_period_state"],
+        )
+
+    if add_rsi_feature is True:
+        qf.add_rsi(
+            periods=settings_dict["rsi_periods_state"],
+            rsi_lower=settings_dict["rsi_lower_state"],
+            rsi_upper=settings_dict["rsi_upper_state"],
+        )
+
+    if add_sma_feature is True:
+        qf.add_sma(periods=settings_dict["sma_periods_state"])
 
     # cast QuantFig object to plotly figure
     qf_fig = qf.figure()
@@ -73,7 +113,8 @@ def get_quantfig(
         type="date",
     )
     qf_fig.update_layout(xaxis=slider_dict)
-    return data, qf_fig
+
+    return qf_fig
 
 
 def persist_figure(qf_fig: go.Figure, ticker: yf.Ticker):
@@ -136,4 +177,4 @@ def extract_ticker_symbols():
 
 
 if __name__ == "__main__":
-    fig = get_quantfig(yf.Ticker("PLUG"), date(2020, 1, 1), date.today())[1]
+    fig_old = get_quantfig(yf.Ticker("PLUG"), date(2020, 1, 1), date.today())[1]

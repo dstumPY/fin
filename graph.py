@@ -1,0 +1,18 @@
+kwargs_dict = {
+    "ticker_dropdown_state": "AACG",
+    "ticker_date_range_start_state": "2020-01-01",
+    "ticker_date_range_end_state": "2021-02-22",
+    "bollinger_check_state": ["bollinger_bands"],
+    "macd_check_state": ["macd_check"],
+    "rsi_check_state": ["rsi_check"],
+    "sma_check_state": ["sma_check"],
+    "bollinger_periods_state": 2000,
+    "boll_std_state": 2,
+    "macd_fast_period_state": 12,
+    "macd_slow_period_state": 26,
+    "macd_signal_period_state": 9,
+    "rsi_periods_state": 20,
+    "rsi_lower_state": 70,
+    "rsi_upper_state": 30,
+    "sma_periods_state": 20,
+}

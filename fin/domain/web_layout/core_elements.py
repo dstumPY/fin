@@ -3,8 +3,8 @@ import dash_html_components as html
 import dash_core_components as dcc
 import joblib
 from datetime import date, datetime
-from src import config
-from src.session.usersession import session_default
+from fin import config
+from fin.domain.session.usersession import session_default
 from typing import List, Tuple
 
 
@@ -56,14 +56,12 @@ def feature_settings() -> Tuple[html.Div, html.Div]:
             dbc.InputGroupAddon("Periods", addon_type="prepend"),
             dbc.Input(
                 id="bollinger_periods",
-                placeholder=session_default.bollinger_input_periods,
-                **input_default
+                placeholder=session_default.bollinger_periods,
+                **input_default,
             ),
             dbc.InputGroupAddon("Std deviation", addon_type="prepend"),
             dbc.Input(
-                id="boll_std",
-                placeholder=session_default.bollinger_input_stddev,
-                **input_default
+                id="boll_std", placeholder=session_default.boll_std, **input_default
             ),
         ],
     )
@@ -80,19 +78,19 @@ def feature_settings() -> Tuple[html.Div, html.Div]:
             dbc.Input(
                 id="macd_fast_period",
                 placeholder=session_default.macd_fast_period,
-                **input_default
+                **input_default,
             ),
             dbc.InputGroupAddon("SlowPeriod"),
             dbc.Input(
                 id="macd_slow_period",
                 placeholder=session_default.macd_slow_period,
-                **input_default
+                **input_default,
             ),
             dbc.InputGroupAddon("SignalPeriod"),
             dbc.Input(
                 id="macd_signal_period",
                 placeholder=session_default.macd_signal_period,
-                **input_default
+                **input_default,
             ),
         ]
     )
@@ -109,7 +107,7 @@ def feature_settings() -> Tuple[html.Div, html.Div]:
             dbc.Input(
                 id="rsi_periods",
                 placeholder=session_default.rsi_periods,
-                **input_default
+                **input_default,
             ),
             dbc.InputGroupAddon("RSI lower"),
             dbc.Input(
@@ -132,7 +130,9 @@ def feature_settings() -> Tuple[html.Div, html.Div]:
         [
             dbc.InputGroupAddon("Periods"),
             dbc.Input(
-                id="sma_periods", placeholder=session_default.sma_periods, **input_default
+                id="sma_periods",
+                placeholder=session_default.sma_periods,
+                **input_default,
             ),
         ]
     )
@@ -170,7 +170,7 @@ def stock_settings() -> html.Div:
     ticker_dropdown = get_ticker_symbols()
     date_range_picker = dcc.DatePickerRange(
         id="ticker_date_range",
-        start_date=datetime.strptime(session_default.start_date, "%Y-%m-%d"),
+        start_date=datetime.strptime(session_default.start_date, "%Y-%m-%d").date(),
         end_date=datetime.strftime(date.today(), "%Y-%m-%d"),
         clearable=True,
         first_day_of_week=1,

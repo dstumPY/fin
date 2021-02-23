@@ -1,6 +1,6 @@
 import joblib
 from datetime import date
-from src import config
+from fin import config
 from typing import Dict, List
 
 
@@ -15,8 +15,8 @@ class UserSession:
         start_date (str):               first day the chart begins
         end_date (str):                 last day the chart ends
         bollinger_check (List[str]):    checklist value for Bollinger feature
-        bollinger_input_periods (int):  periods setting for Bollinger feature
-        bollinger_input_stddev (int):   standard deviation setting for Bollinger feature
+        bollinger_periods (int):  periods setting for Bollinger feature
+        boll_std (int):   standard deviation setting for Bollinger feature
         macd_check (List[str]):         checklist value for MACD feature
         macd_fast_period (int):         fast periods setting for MACD feature
         macd_slow_period (int):         slow periods setting for MACD feature
@@ -48,8 +48,8 @@ class UserSession:
             self.start_date: str = str(date(2020, 1, 1))
             self.end_date: str = str(date.today())
             self.bollinger_check: List[str] = ["bollinger_bands"]
-            self.bollinger_input_periods: int = 20
-            self.bollinger_input_stddev: int = 2
+            self.bollinger_periods: int = 20
+            self.boll_std: int = 2
             self.macd_check: List[str] = ["macd_check"]
             self.macd_fast_period: int = 12
             self.macd_slow_period: int = 26
