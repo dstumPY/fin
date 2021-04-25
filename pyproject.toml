@@ -2,7 +2,7 @@
 line-length = 88
 
 [tool.isort]
-known_third_party = ["cufflinks", "dash", "dash_bootstrap_components", "dash_core_components", "dash_html_components", "dotenv", "joblib", "pandas", "pkg_resources", "plotly", "pylab", "yfinance"]
+known_third_party = ["cufflinks", "dash", "dash_bootstrap_components", "dash_core_components", "dash_html_components", "dotenv", "joblib", "pandas", "plotly", "pylab", "yfinance"]
 line_length = 88
 multi_line_output = 3
 include_trailing_comma = "True"
@@ -27,6 +27,7 @@ dash = "^1.19.0"
 joblib = "^1.0.0"
 Yahoo-ticker-downloader = "^3.0.1"
 dash-bootstrap-components = "^0.11.2"
+chart-studio = "^1.1.0"
 
 [tool.poetry.dev-dependencies]
 black = "20.8b1"

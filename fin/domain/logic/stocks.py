@@ -26,8 +26,8 @@ except NameError:
     pass
 
 
-def stocks_data(
-    ticker_symbol: str = session_default.ticker,
+def get_stocks_data(
+    ticker_symbol: str = session_default.ticker[0],
     date_start: str = session_default.start_date,
     date_end: str = session_default.end_date,
 ) -> pd.DataFrame:
@@ -63,8 +63,12 @@ def stocks_chart(
         go.Figure: final stock chart
     """
     # setting default values
-    data = stock_data or stocks_data()
-    settings_dict = settings_dict or session_default.__dict__
+    data = get_stocks_data() if stock_data is None else stock_data
+    if settings_dict is None:
+        settings_dict = {
+            key + "_state": value for key, value in session_default.__dict__.items()
+        }
+        settings_dict["ticker_dropdown_state"] = settings_dict["ticker"][0]
     # extract chart settings from settings_dict
 
     # if  UI checklists were deselected settings_dict values are empty lists
@@ -183,6 +187,6 @@ def extract_ticker_symbols():
 
 
 if __name__ == "__main__":
-    fig_data = stocks_data()
+    fig_data = get_stocks_data()
     fig = stocks_chart()
     print("Done.")

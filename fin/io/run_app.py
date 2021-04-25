@@ -1,40 +1,42 @@
+"""Main web layout definition."""
 import dash
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
-from dash.exceptions import PreventUpdate
 import dash_html_components as html
-import json
-from pkg_resources import compatible_platforms
-import plotly.express as px
-import pandas as pd
-import yfinance as yf
 import joblib
+import plotly.graph_objects as go
 from dash.dependencies import Input, Output, State
+from dash.exceptions import PreventUpdate
+
 from fin import config
-from fin.domain.session.usersession import session_default
+from fin.domain.logic.stocks import get_stocks_data, stocks_chart
 from fin.domain.web_layout import core_elements
-from fin.domain.logic.stocks import get_quantfig, stocks_data, stocks_chart
-from typing import Dict, List
 
-
+# create app
 external_stylesheets = [dbc.themes.BOOTSTRAP]
 app = dash.Dash(external_stylesheets=external_stylesheets)
 
-fig = joblib.load(config.DATA_FOLDER / "plug_fig.lzma")
-
-
+# set static web elements
 headline = html.H1("Stock Market Analysis")
 description = html.Div(children="Choose your settings.")
 stocks_div = core_elements.stock_settings()
+
+# load input web elements (sma, rsi, bollinger, etc.)
 features1_div, feature2_div = core_elements.feature_settings()
+
+# button element which generates the chart
 button = dbc.Button(
     "Generate chart", id="generate_button", color="primary", block=True, size="sm"
 )
+
+# load initial displayed figure
+fig = joblib.load(config.DATA_FOLDER / "plug_fig.lzma")
 graph = dcc.Graph(id="stock-graph", figure=fig)
 
+# set up data store element in order to store current board settings
 data_store = dcc.Store(id="data_store")
 
-
+# set id names in order to identify web elements
 dropdown_state = ["ticker_dropdown_state"]
 ticker_date_range_state = [
     "ticker_date_range_start_state",
@@ -72,7 +74,11 @@ state_store = html.Div(
     Output("bollinger_check_state", "children"),
     Input("bollinger_check", "value"),
 )
-def store_bollinger_check_state(check_state: List):
+def store_bollinger_check_state(check_state: list):
+    """Store current checkbox value in corresponding Div elt.
+
+    bollinger_check -> bollinger_check_state
+    """
     return check_state
 
 
@@ -80,7 +86,11 @@ def store_bollinger_check_state(check_state: List):
     Output("macd_check_state", "children"),
     Input("macd_check", "value"),
 )
-def store_macd_check_state(check_state: List):
+def store_macd_check_state(check_state: list):
+    """Store current checkbox value in corresponding Div elt.
+
+    macd_check -> macd_check_state
+    """
     return check_state
 
 
@@ -88,7 +98,11 @@ def store_macd_check_state(check_state: List):
     Output("rsi_check_state", "children"),
     Input("rsi_check", "value"),
 )
-def store_rsi_check_state(check_state: List):
+def store_rsi_check_state(check_state: list):
+    """Store current checkbox value in corresponding Div elt.
+
+    rsi_check -> rsi_check_state
+    """
     return check_state
 
 
@@ -96,7 +110,11 @@ def store_rsi_check_state(check_state: List):
     Output("sma_check_state", "children"),
     Input("sma_check", "value"),
 )
-def store_sma_check_state(check_state: List):
+def store_sma_check_state(check_state: list):
+    """Store current checkbox value in corresponding Div elt.
+
+    sma_check -> sma_check_state
+    """
     return check_state
 
 
@@ -106,6 +124,10 @@ def store_sma_check_state(check_state: List):
     Input("bollinger_periods", "placeholder"),
 )
 def store_boll_periods_state(setting_val, setting_default):
+    """Store current input value in corresponding Div elt.
+
+    bollinger_periods (value  or placeholder) -> bollinger_periods_state
+    """
     return setting_val or setting_default
 
 
@@ -115,6 +137,10 @@ def store_boll_periods_state(setting_val, setting_default):
     Input("boll_std", "placeholder"),
 )
 def store_boll_std_state(setting_val, setting_default):
+    """Store current input value in corresponding Div elt.
+
+    boll_std (value  or placeholder) -> boll_std_state
+    """
     return setting_val or setting_default
 
 
@@ -123,6 +149,10 @@ def store_boll_std_state(setting_val, setting_default):
     Input("ticker_dropdown", "value"),
 )
 def ticker_dropdown_state(setting_val):
+    """Store current dropdown value in corresponding Div elt.
+
+    ticker_dropdown -> ticker_dropdown_state
+    """
     return setting_val
 
 
@@ -131,6 +161,10 @@ def ticker_dropdown_state(setting_val):
     Input("ticker_date_range", "start_date"),
 )
 def ticker_date_range_start_state(setting_val):
+    """Store current date range start value in corresponding Div elt.
+
+    ticker_date_range (start_date) -> ticker_date_range_start_state
+    """
     return setting_val
 
 
@@ -139,6 +173,10 @@ def ticker_date_range_start_state(setting_val):
     Input("ticker_date_range", "end_date"),
 )
 def ticker_date_range_end_state(setting_val):
+    """Store current date range end value in corresponding Div elt.
+
+    ticker_date_range (end_date) -> ticker_date_range_end_state
+    """
     return setting_val
 
 
@@ -148,6 +186,10 @@ def ticker_date_range_end_state(setting_val):
     Input("macd_fast_period", "placeholder"),
 )
 def macd_fast_period_state(setting_val, setting_default):
+    """Store current input value in corresponding Div elt.
+
+    macd_fast_period (value or placeholder) -> macd_fast_period_state
+    """
     return setting_val or setting_default
 
 
@@ -157,6 +199,10 @@ def macd_fast_period_state(setting_val, setting_default):
     Input("macd_slow_period", "placeholder"),
 )
 def macd_slow_period_state(setting_val, setting_default):
+    """Store current input value in corresponding Div elt.
+
+    macd_slow_period (value or placeholder) -> macd_slow_period_state
+    """
     return setting_val or setting_default
 
 
@@ -166,6 +212,10 @@ def macd_slow_period_state(setting_val, setting_default):
     Input("macd_signal_period", "placeholder"),
 )
 def macd_signal_period_state(setting_val, setting_default):
+    """Store current input value in corresponding Div elt.
+
+    macd_signal_period (value or placeholder) -> macd_signal_period_state
+    """
     return setting_val or setting_default
 
 
@@ -175,6 +225,10 @@ def macd_signal_period_state(setting_val, setting_default):
     Input("rsi_periods", "placeholder"),
 )
 def rsi_periods_state(setting_val, setting_default):
+    """Store current input value in corresponding Div elt.
+
+    rsi_period (value or placeholder) -> rsi_period_state
+    """
     return setting_val or setting_default
 
 
@@ -184,6 +238,10 @@ def rsi_periods_state(setting_val, setting_default):
     Input("rsi_lower", "placeholder"),
 )
 def rsi_lower_state(setting_val, setting_default):
+    """Store current input value in corresponding Div elt.
+
+    rsi_lower (value or placeholder) -> rsi_lower_state
+    """
     return setting_val or setting_default
 
 
@@ -193,6 +251,10 @@ def rsi_lower_state(setting_val, setting_default):
     Input("rsi_upper", "placeholder"),
 )
 def rsi_upper_state(setting_val, setting_default):
+    """Store current input value in corresponding Div elt.
+
+    rsi_upper (value or placeholder) -> rsi_upper_state
+    """
     return setting_val or setting_default
 
 
@@ -202,6 +264,10 @@ def rsi_upper_state(setting_val, setting_default):
     Input("sma_periods", "placeholder"),
 )
 def sma_periods_state(setting_val, setting_default):
+    """Store current input value in corresponding Div elt.
+
+    sma_periods (value or placeholder) -> sma_periods_state
+    """
     return setting_val or setting_default
 
 
@@ -210,16 +276,25 @@ states = [State(state_id, "children") for state_id in state_ids]
 
 @app.callback(
     Output(component_id="stock-graph", component_property="figure"),
-    # Output(component_id="data_store", component_property="data"),
     Input(component_id="generate_button", component_property="n_clicks"),
     states,
 )
-def store_chart_settings(n_clicks, *args):
+def store_chart_settings(n_clicks: int, *args) -> go.Figure:
+    """Generate chart on click event based on states settings.
+
+    Args:
+        n_clicks (int): number the button was clicked
+
+    Raises:
+        PreventUpdate: prevent code execution on initial run
+
+    Returns:
+        go.Figure: chart figure
+    """
     # TODO: Add docstring
     # TODO: read out chart settings
     if n_clicks is None:
-        # create initial user session on start up
-        # data = session_default
+        # prevent execution on init run
         raise PreventUpdate
     else:
         # make component properties  values accessable by their component id name
@@ -227,7 +302,7 @@ def store_chart_settings(n_clicks, *args):
         kwargs_dict = dict(zip(input_names, args))
 
         # request stock data from yf API
-        stocks_df = stocks_data(
+        stocks_df = get_stocks_data(
             kwargs_dict["ticker_dropdown_state"],
             kwargs_dict["ticker_date_range_start_state"],
             kwargs_dict["ticker_date_range_end_state"],
