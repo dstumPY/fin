@@ -3,6 +3,8 @@
 This is a web-based tool to help you with analyzing and comparing different stocks.
 The data will be provided by the beautiful [yfinance](https://pypi.org/project/yfinance/) project.
 
+![alt text](getting_started.gif?raw=true "Title")
+
 ## Getting started
 
 1. Build prod image
@@ -38,7 +40,7 @@ You can create your dev container setup for development inside that container si
     ```
 
 3. You can use VsCode now to attach the dev container
-    
+
 4. Attach to your container using VSCode or via CLI
 
     ```
